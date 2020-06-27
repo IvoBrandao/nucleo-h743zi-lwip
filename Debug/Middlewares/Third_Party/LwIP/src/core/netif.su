@@ -15,3 +15,4 @@ netif.c:708:1:netif_set_status_callback	16	static
 netif.c:735:1:netif_set_link_up	16	static
 netif.c:760:1:netif_set_link_down	16	static
 netif.c:774:1:netif_set_link_callback	16	static
+netif.c:994:1:netif_alloc_client_data_id	16	static

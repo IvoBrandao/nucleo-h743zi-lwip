@@ -97,6 +97,8 @@ Middlewares/Third_Party/LwIP/src/core/memp.o: \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/inet.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/errno.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/netifapi.h \
+ ../Middlewares/Third_Party/LwIP/src/include/lwip/dhcp.h \
+ ../Middlewares/Third_Party/LwIP/src/include/lwip/autoip.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/etharp.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/prot/ethernet.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/prot/etharp.h \
@@ -302,6 +304,10 @@ Middlewares/Third_Party/LwIP/src/core/memp.o: \
 ../Middlewares/Third_Party/LwIP/src/include/lwip/errno.h:
 
 ../Middlewares/Third_Party/LwIP/src/include/lwip/netifapi.h:
+
+../Middlewares/Third_Party/LwIP/src/include/lwip/dhcp.h:
+
+../Middlewares/Third_Party/LwIP/src/include/lwip/autoip.h:
 
 ../Middlewares/Third_Party/LwIP/src/include/lwip/etharp.h:
 

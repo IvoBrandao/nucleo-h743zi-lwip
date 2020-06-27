@@ -212,6 +212,7 @@ void Task_HeartBeat(void const * argument)
   for(;;)
   {
 
+
 	  HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
     osDelay(100);
   }
@@ -247,12 +248,13 @@ void TASK_DHCP(void const * argument)
 {
   /* USER CODE BEGIN TASK_DHCP */
 
+#if LWIP_DHCP
 	  struct netif *netif = (struct netif *) argument;
 	  ip_addr_t ipaddr;
 	  ip_addr_t netmask;
 	  ip_addr_t gw;
 	  struct dhcp *dhcp;
-
+#endif
 	  for (;;)
 	  {
 

@@ -1,0 +1,6 @@
+netifapi.c:58:1:netifapi_do_netif_add	56	static
+netifapi.c:84:1:netifapi_do_netif_set_addr	24	static
+netifapi.c:103:1:netifapi_do_netif_common	24	static
+netifapi.c:125:1:netifapi_netif_add	64	static
+netifapi.c:170:1:netifapi_netif_set_addr	64	static
+netifapi.c:206:1:netifapi_netif_common	64	static
