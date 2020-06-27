@@ -53,8 +53,18 @@
 #define LWIP_RAM_HEAP_POINTER 0x30044000
 /*----- Value supported for H7 devices: 1 -----*/
 #define LWIP_SUPPORT_CUSTOM_PBUF 1
+/*----- Default Value for ARP_QUEUEING: 0 ---*/
+#define ARP_QUEUEING 1
 /*----- Value in opt.h for LWIP_ETHERNET: LWIP_ARP || PPPOE_SUPPORT -*/
 #define LWIP_ETHERNET 1
+/*----- Default Value for ETHARP_SUPPORT_STATIC_ENTRIES: 0 ---*/
+#define ETHARP_SUPPORT_STATIC_ENTRIES 1
+/*----- Default Value for LWIP_BROADCAST_PING: 0 ---*/
+#define LWIP_BROADCAST_PING 1
+/*----- Default Value for LWIP_MULTICAST_PING: 0 ---*/
+#define LWIP_MULTICAST_PING 1
+/*----- Default Value for LWIP_MULTICAST_TX_OPTIONS: 0 ---*/
+#define LWIP_MULTICAST_TX_OPTIONS 1
 /*----- Value in opt.h for LWIP_DNS_SECURE: (LWIP_DNS_SECURE_RAND_XID | LWIP_DNS_SECURE_NO_MULTIPLE_OUTSTANDING | LWIP_DNS_SECURE_RAND_SRC_PORT) -*/
 #define LWIP_DNS_SECURE 7
 /*----- Value in opt.h for TCP_SND_QUEUELEN: (4*TCP_SND_BUF + (TCP_MSS - 1))/TCP_MSS -----*/
@@ -65,6 +75,10 @@
 #define TCP_SNDQUEUELOWAT 5
 /*----- Value in opt.h for TCP_WND_UPDATE_THRESHOLD: LWIP_MIN(TCP_WND/4, TCP_MSS*4) -----*/
 #define TCP_WND_UPDATE_THRESHOLD 536
+/*----- Default Value for LWIP_NETIF_STATUS_CALLBACK: 0 ---*/
+#define LWIP_NETIF_STATUS_CALLBACK 1
+/*----- Default Value for LWIP_NETIF_LINK_CALLBACK: 0 ---*/
+#define LWIP_NETIF_LINK_CALLBACK 1
 /*----- Value in opt.h for TCPIP_THREAD_STACKSIZE: 0 -----*/
 #define TCPIP_THREAD_STACKSIZE 1024
 /*----- Value in opt.h for TCPIP_THREAD_PRIO: 1 -----*/

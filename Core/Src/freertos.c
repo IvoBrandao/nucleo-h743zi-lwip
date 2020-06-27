@@ -24,9 +24,16 @@
 #include "main.h"
 #include "cmsis_os.h"
 
-
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */     
+#include "lwipopts.h"
+#include "lwip/opt.h"
+#include "lwip/netif.h"
+#include "lwip/tcpip.h"
+#if LWIP_DHCP
+#include "lwip/dhcp.h"
+#endif
+#include "ethernetif.h"
 #include "gpio.h"
 /* USER CODE END Includes */
 
@@ -47,10 +54,12 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN Variables */
-
+uint8_t DHCP_state;
 /* USER CODE END Variables */
 osThreadId StartupTaskHandle;
 osThreadId HeartBeat_TaskHandle;
+osThreadId UdpServer_TaskHandle;
+osThreadId DHCP_TaskHandle;
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
@@ -59,6 +68,8 @@ osThreadId HeartBeat_TaskHandle;
 
 void Task_Startup(void const * argument);
 void Task_HeartBeat(void const * argument);
+void Task_UdpServer(void const * argument);
+void TASK_DHCP(void const * argument);
 
 extern void MX_LWIP_Init(void);
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
@@ -148,6 +159,14 @@ void MX_FREERTOS_Init(void) {
   osThreadDef(HeartBeat_Task, Task_HeartBeat, osPriorityNormal, 0, 2048);
   HeartBeat_TaskHandle = osThreadCreate(osThread(HeartBeat_Task), NULL);
 
+  /* definition and creation of UdpServer_Task */
+  osThreadDef(UdpServer_Task, Task_UdpServer, osPriorityBelowNormal, 0, 2048);
+  UdpServer_TaskHandle = osThreadCreate(osThread(UdpServer_Task), NULL);
+
+  /* definition and creation of DHCP_Task */
+  osThreadDef(DHCP_Task, TASK_DHCP, osPriorityNormal, 0, 1024);
+  DHCP_TaskHandle = osThreadCreate(osThread(DHCP_Task), NULL);
+
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
   /* USER CODE END RTOS_THREADS */
@@ -166,6 +185,9 @@ void Task_Startup(void const * argument)
   /* init code for LWIP */
   MX_LWIP_Init();
   /* USER CODE BEGIN Task_Startup */
+
+
+
   /* Infinite loop */
   for(;;)
   {
@@ -194,6 +216,102 @@ void Task_HeartBeat(void const * argument)
     osDelay(100);
   }
   /* USER CODE END Task_HeartBeat */
+}
+
+/* USER CODE BEGIN Header_Task_UdpServer */
+/**
+* @brief Function implementing the UdpServer_Task thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_Task_UdpServer */
+void Task_UdpServer(void const * argument)
+{
+  /* USER CODE BEGIN Task_UdpServer */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1000);
+  }
+  /* USER CODE END Task_UdpServer */
+}
+
+/* USER CODE BEGIN Header_TASK_DHCP */
+/**
+* @brief Function implementing the DHCP_Task thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_TASK_DHCP */
+void TASK_DHCP(void const * argument)
+{
+  /* USER CODE BEGIN TASK_DHCP */
+
+	  struct netif *netif = (struct netif *) argument;
+	  ip_addr_t ipaddr;
+	  ip_addr_t netmask;
+	  ip_addr_t gw;
+	  struct dhcp *dhcp;
+
+	  for (;;)
+	  {
+
+#if LWIP_DHCP
+	    switch (DHCP_state)
+	    {
+	    case DHCP_START:
+	      {
+	        ip_addr_set_zero_ip4(&netif->ip_addr);
+	        ip_addr_set_zero_ip4(&netif->netmask);
+	        ip_addr_set_zero_ip4(&netif->gw);
+	        DHCP_state = DHCP_WAIT_ADDRESS;
+
+	        dhcp_start(netif);
+	      }
+	      break;
+	    case DHCP_WAIT_ADDRESS:
+	      {
+	        if (dhcp_supplied_address(netif))
+	        {
+	          DHCP_state = DHCP_ADDRESS_ASSIGNED;
+
+	        }
+	        else
+	        {
+	          dhcp = (struct dhcp *)netif_get_client_data(netif, LWIP_NETIF_CLIENT_DATA_INDEX_DHCP);
+
+	          /* DHCP timeout */
+	          if (dhcp->tries > MAX_DHCP_TRIES)
+	          {
+	            DHCP_state = DHCP_TIMEOUT;
+
+	            /* Stop DHCP */
+	            dhcp_stop(netif);
+
+	            /* Static address used */
+	            IP_ADDR4(&ipaddr, IP_ADDR0 ,IP_ADDR1 , IP_ADDR2 , IP_ADDR3 );
+	            IP_ADDR4(&netmask, NETMASK_ADDR0, NETMASK_ADDR1, NETMASK_ADDR2, NETMASK_ADDR3);
+	            IP_ADDR4(&gw, GW_ADDR0, GW_ADDR1, GW_ADDR2, GW_ADDR3);
+	            netif_set_addr(netif, ip_2_ip4(&ipaddr), ip_2_ip4(&netmask), ip_2_ip4(&gw));
+	          }
+	        }
+	      }
+	      break;
+	  case DHCP_LINK_DOWN:
+	    {
+	      /* Stop DHCP */
+	      dhcp_stop(netif);
+	      DHCP_state = DHCP_OFF;
+
+	    }
+	    break;
+	    default: break;
+	    }
+#endif
+	    /* wait 500 ms */
+	    osDelay(500);
+	  }
+  /* USER CODE END TASK_DHCP */
 }
 
 /* Private application code --------------------------------------------------*/

@@ -24,16 +24,18 @@
 #if defined ( __CC_ARM )  /* MDK ARM Compiler */
 #include "lwip/sio.h"
 #endif /* MDK ARM Compiler */
+#include "ethernetif.h"
 
 /* USER CODE BEGIN 0 */
-
+#include "stdbool.h"
 /* USER CODE END 0 */
 /* Private function prototypes -----------------------------------------------*/
+static void ethernet_link_status_updated(struct netif *netif);
 /* ETH Variables initialization ----------------------------------------------*/
 void Error_Handler(void);
 
 /* USER CODE BEGIN 1 */
-
+extern uint8_t DHCP_state;
 /* USER CODE END 1 */
 
 /* Variables Initialization */
@@ -93,6 +95,15 @@ void MX_LWIP_Init(void)
     netif_set_down(&gnetif);
   }
 
+  /* Set the link callback function, this function is called on change of link status*/
+  netif_set_link_callback(&gnetif, ethernet_link_status_updated);
+
+  /* Create the Ethernet link handler thread */
+/* USER CODE BEGIN H7_OS_THREAD_DEF_CREATE_CMSIS_RTOS_V1 */
+  osThreadDef(EthLink, ethernet_link_thread, osPriorityBelowNormal, 0, configMINIMAL_STACK_SIZE *2);
+  osThreadCreate (osThread(EthLink), &gnetif);
+/* USER CODE END H7_OS_THREAD_DEF_CREATE_CMSIS_RTOS_V1 */
+
 /* USER CODE BEGIN 3 */
 
 /* USER CODE END 3 */
@@ -104,6 +115,31 @@ void MX_LWIP_Init(void)
 /* USER CODE BEGIN 4 */
 /* USER CODE END 4 */
 #endif
+
+/**
+  * @brief  Notify the User about the network interface config status 
+  * @param  netif: the network interface
+  * @retval None
+  */
+static void ethernet_link_status_updated(struct netif *netif) 
+{
+  if (netif_is_up(netif))
+  {
+/* USER CODE BEGIN 5 */
+	/* Update DHCP state machine */
+	DHCP_state = DHCP_START;
+/* USER CODE END 5 */
+  }
+  else /* netif is down */
+  {  
+/* USER CODE BEGIN 6 */
+#if LWIP_DHCP
+    /* Update DHCP state machine */
+    DHCP_state = DHCP_LINK_DOWN;
+#endif
+/* USER CODE END 6 */
+  } 
+}
 
 #if defined ( __CC_ARM )  /* MDK ARM Compiler */
 /**

@@ -28,6 +28,6 @@ sockets.c:1783:1:lwip_getsockname	24	static
 sockets.c:1789:1:lwip_getsockopt	48	static
 sockets.c:1887:1:lwip_getsockopt_impl	40	static
 sockets.c:2195:1:lwip_setsockopt	48	static
-sockets.c:2288:1:lwip_setsockopt_impl	32	static
+sockets.c:2288:1:lwip_setsockopt_impl	40	static
 sockets.c:2615:1:lwip_ioctl	40	static
 sockets.c:2712:1:lwip_fcntl	48	static

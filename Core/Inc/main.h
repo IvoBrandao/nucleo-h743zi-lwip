@@ -58,6 +58,25 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define DHCP_OFF 0
+#define DHCP_START 1
+#define DHCP_WAIT_ADDRESS 2
+#define DHCP_ADDRESS_ASSIGNED 3
+#define DHCP_TIMEOUT 4
+#define DHCP_LINK_DOWN 5
+#define IP_ADDR0 10
+#define IP_ADDR1 10
+#define IP_ADDR2 10
+#define IP_ADDR3 10
+#define NETMASK_ADDR0 255
+#define NETMASK_ADDR1 255
+#define NETMASK_ADDR2 255
+#define NETMASK_ADDR3 0
+#define GW_ADDR0 10
+#define GW_ADDR1 10
+#define GW_ADDR2 10
+#define GW_ADDR3 11
+#define MAX_DHCP_TRIES 5
 #define USER_Btn_Pin GPIO_PIN_13
 #define USER_Btn_GPIO_Port GPIOC
 #define MCO_Pin GPIO_PIN_0
