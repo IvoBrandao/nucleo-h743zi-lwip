@@ -171,6 +171,7 @@ SECTIONS
     . = ALIGN(8);
   } >RAM_D1
 
+ /* Modification start */
   .lwip_sec (NOLOAD) : {
     . = ABSOLUTE(0x30040000);
     *(.RxDecripSection) 
@@ -180,7 +181,8 @@ SECTIONS
     
     . = ABSOLUTE(0x30040200);
     *(.RxArraySection) 
-  } >RAM_D2 AT> FLASH
+  } >RAM_D2
+  /* Modification end */
 
   /* Remove information from the compiler libraries */
   /DISCARD/ :

@@ -5,4 +5,4 @@ freertos.c:132:6:MX_FREERTOS_Init	128	static
 freertos.c:183:6:Task_Startup	16	static
 freertos.c:208:6:Task_HeartBeat	16	static
 freertos.c:229:6:Task_UdpServer	16	static
-freertos.c:247:6:TASK_DHCP	16	static
+freertos.c:266:6:TASK_DHCP	16	static
