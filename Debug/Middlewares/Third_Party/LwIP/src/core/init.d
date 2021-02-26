@@ -46,6 +46,7 @@ Middlewares/Third_Party/LwIP/src/core/init.o: \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/memp.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/priv/memp_std.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/priv/memp_priv.h \
+ ../Middlewares/Third_Party/LwIP/src/include/lwip/priv/mem_priv.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/sys.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/err.h \
  ../Middlewares/Third_Party/LwIP/system/arch/sys_arch.h \
@@ -86,6 +87,7 @@ Middlewares/Third_Party/LwIP/src/core/init.o: \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/prot/udp.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/priv/tcp_priv.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/tcp.h \
+ ../Middlewares/Third_Party/LwIP/src/include/lwip/tcpbase.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/icmp.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/prot/icmp.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/prot/tcp.h \
@@ -94,6 +96,7 @@ Middlewares/Third_Party/LwIP/src/core/init.o: \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/timeouts.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/etharp.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/prot/ethernet.h \
+ ../Middlewares/Third_Party/LwIP/src/include/lwip/prot/ieee.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/prot/etharp.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/nd6.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/mld6.h \
@@ -196,6 +199,8 @@ Middlewares/Third_Party/LwIP/src/core/init.o: \
 
 ../Middlewares/Third_Party/LwIP/src/include/lwip/priv/memp_priv.h:
 
+../Middlewares/Third_Party/LwIP/src/include/lwip/priv/mem_priv.h:
+
 ../Middlewares/Third_Party/LwIP/src/include/lwip/sys.h:
 
 ../Middlewares/Third_Party/LwIP/src/include/lwip/err.h:
@@ -276,6 +281,8 @@ Middlewares/Third_Party/LwIP/src/core/init.o: \
 
 ../Middlewares/Third_Party/LwIP/src/include/lwip/tcp.h:
 
+../Middlewares/Third_Party/LwIP/src/include/lwip/tcpbase.h:
+
 ../Middlewares/Third_Party/LwIP/src/include/lwip/icmp.h:
 
 ../Middlewares/Third_Party/LwIP/src/include/lwip/prot/icmp.h:
@@ -291,6 +298,8 @@ Middlewares/Third_Party/LwIP/src/core/init.o: \
 ../Middlewares/Third_Party/LwIP/src/include/lwip/etharp.h:
 
 ../Middlewares/Third_Party/LwIP/src/include/lwip/prot/ethernet.h:
+
+../Middlewares/Third_Party/LwIP/src/include/lwip/prot/ieee.h:
 
 ../Middlewares/Third_Party/LwIP/src/include/lwip/prot/etharp.h:
 

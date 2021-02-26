@@ -1,5 +1,4 @@
 Core/Src/syscalls.o: ../Core/Src/syscalls.c \
- ../Middlewares/Third_Party/LwIP/src/include/posix/errno.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/errno.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/opt.h \
  ../LWIP/Target/lwipopts.h ../Core/Inc/main.h \
@@ -41,8 +40,6 @@ Core/Src/syscalls.o: ../Core/Src/syscalls.c \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/arch.h \
  ../Middlewares/Third_Party/LwIP/system/arch/cc.h \
  ../Middlewares/Third_Party/LwIP/system/arch/cpu.h
-
-../Middlewares/Third_Party/LwIP/src/include/posix/errno.h:
 
 ../Middlewares/Third_Party/LwIP/src/include/lwip/errno.h:
 

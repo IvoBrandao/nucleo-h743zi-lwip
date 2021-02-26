@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2021 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under Ultimate Liberty license
@@ -47,32 +47,34 @@
 #define IFNAME1 't'
 
 /* ETH Setting  */
-#define ETH_RX_BUFFER_SIZE                     ( 1536UL )
 #define ETH_DMA_TRANSMIT_TIMEOUT               ( 20U )
+/* ETH_RX_BUFFER_SIZE parameter is defined in lwipopts.h */
 
 /* USER CODE BEGIN 1 */
 
 /* USER CODE END 1 */
 
 /* Private variables ---------------------------------------------------------*/
-/* 
+/*
 @Note: This interface is implemented to operate in zero-copy mode only:
         - Rx buffers are allocated statically and passed directly to the LwIP stack
-          they will return back to DMA after been processed by the stack.
-        - Tx Buffers will be allocated from LwIP stack memory heap, 
+          they will return back to ETH DMA after been processed by the stack.
+        - Tx Buffers will be allocated from LwIP stack memory heap,
           then passed to ETH HAL driver.
 
-@Notes: 
-  1.a. ETH DMA Rx descriptors must be contiguous, the default count is 4, 
+@Notes:
+  1.a. ETH DMA Rx descriptors must be contiguous, the default count is 4,
        to customize it please redefine ETH_RX_DESC_CNT in ETH GUI (Rx Descriptor Length)
        so that updated value will be generated in stm32xxxx_hal_conf.h
-  1.b. ETH DMA Tx descriptors must be contiguous, the default count is 4, 
+  1.b. ETH DMA Tx descriptors must be contiguous, the default count is 4,
        to customize it please redefine ETH_TX_DESC_CNT in ETH GUI (Tx Descriptor Length)
        so that updated value will be generated in stm32xxxx_hal_conf.h
 
   2.a. Rx Buffers number must be between ETH_RX_DESC_CNT and 2*ETH_RX_DESC_CNT
   2.b. Rx Buffers must have the same size: ETH_RX_BUFFER_SIZE, this value must
        passed to ETH DMA in the init field (heth.Init.RxBuffLen)
+  2.c  The RX Ruffers addresses and sizes must be properly defined to be aligned
+       to L1-CACHE line size (32 bytes).
 */
 
 #if defined ( __ICCARM__ ) /*!< IAR Compiler */
@@ -90,7 +92,7 @@ __attribute__((at(0x30040000))) ETH_DMADescTypeDef  DMARxDscrTab[ETH_RX_DESC_CNT
 __attribute__((at(0x30040060))) ETH_DMADescTypeDef  DMATxDscrTab[ETH_TX_DESC_CNT]; /* Ethernet Tx DMA Descriptors */
 __attribute__((at(0x30040200))) uint8_t Rx_Buff[ETH_RX_DESC_CNT][ETH_RX_BUFFER_SIZE]; /* Ethernet Receive Buffer */
 
-#elif defined ( __GNUC__ ) /* GNU Compiler */ 
+#elif defined ( __GNUC__ ) /* GNU Compiler */
 
 ETH_DMADescTypeDef DMARxDscrTab[ETH_RX_DESC_CNT] __attribute__((section(".RxDecripSection"))); /* Ethernet Rx DMA Descriptors */
 ETH_DMADescTypeDef DMATxDscrTab[ETH_TX_DESC_CNT] __attribute__((section(".TxDecripSection")));   /* Ethernet Tx DMA Descriptors */
@@ -145,59 +147,49 @@ void HAL_ETH_MspInit(ETH_HandleTypeDef* ethHandle)
     __HAL_RCC_ETH1MAC_CLK_ENABLE();
     __HAL_RCC_ETH1TX_CLK_ENABLE();
     __HAL_RCC_ETH1RX_CLK_ENABLE();
-  
-    __HAL_RCC_GPIOE_CLK_ENABLE();
+
     __HAL_RCC_GPIOC_CLK_ENABLE();
     __HAL_RCC_GPIOA_CLK_ENABLE();
     __HAL_RCC_GPIOB_CLK_ENABLE();
     __HAL_RCC_GPIOG_CLK_ENABLE();
-    /**ETH GPIO Configuration    
-    PE2     ------> ETH_TXD3
+    /**ETH GPIO Configuration
     PC1     ------> ETH_MDC
-    PC2_C     ------> ETH_TXD2
-    PC3_C     ------> ETH_TX_CLK
-    PA0     ------> ETH_CRS
-    PA1     ------> ETH_RX_CLK
+    PA1     ------> ETH_REF_CLK
     PA2     ------> ETH_MDIO
-    PA3     ------> ETH_COL
-    PA7     ------> ETH_RX_DV
+    PA7     ------> ETH_CRS_DV
     PC4     ------> ETH_RXD0
     PC5     ------> ETH_RXD1
-    PB0     ------> ETH_RXD2
-    PB1     ------> ETH_RXD3
     PB13     ------> ETH_TXD1
     PG11     ------> ETH_TX_EN
-    PG13     ------> ETH_TXD0 
+    PG13     ------> ETH_TXD0
     */
-    GPIO_InitStruct.Pin = GPIO_PIN_2;
-    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-    GPIO_InitStruct.Alternate = GPIO_AF11_ETH;
-    HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
-
-    GPIO_InitStruct.Pin = RMII_MDC_Pin|GPIO_PIN_2|GPIO_PIN_3|RMII_RXD0_Pin 
-                          |RMII_RXD1_Pin;
+    GPIO_InitStruct.Pin = RMII_MDC_Pin|RMII_RXD0_Pin|RMII_RXD1_Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
     GPIO_InitStruct.Alternate = GPIO_AF11_ETH;
     HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-    GPIO_InitStruct.Pin = GPIO_PIN_0|GPIO_PIN_1|RMII_MDIO_Pin|GPIO_PIN_3 
-                          |GPIO_PIN_7;
+    GPIO_InitStruct.Pin = GPIO_PIN_1|GPIO_PIN_7;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
     GPIO_InitStruct.Alternate = GPIO_AF11_ETH;
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-    GPIO_InitStruct.Pin = GPIO_PIN_0|GPIO_PIN_1|RMII_TXD1_Pin;
+    GPIO_InitStruct.Pin = RMII_MDIO_Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
     GPIO_InitStruct.Alternate = GPIO_AF11_ETH;
-    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+    HAL_GPIO_Init(RMII_MDIO_GPIO_Port, &GPIO_InitStruct);
+
+    GPIO_InitStruct.Pin = RMII_TXD1_Pin;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+    GPIO_InitStruct.Alternate = GPIO_AF11_ETH;
+    HAL_GPIO_Init(RMII_TXD1_GPIO_Port, &GPIO_InitStruct);
 
     GPIO_InitStruct.Pin = RMII_TX_EN_Pin|RMII_TXD0_Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
@@ -226,34 +218,23 @@ void HAL_ETH_MspDeInit(ETH_HandleTypeDef* ethHandle)
     __HAL_RCC_ETH1MAC_CLK_DISABLE();
     __HAL_RCC_ETH1TX_CLK_DISABLE();
     __HAL_RCC_ETH1RX_CLK_DISABLE();
-  
-    /**ETH GPIO Configuration    
-    PE2     ------> ETH_TXD3
+
+    /**ETH GPIO Configuration
     PC1     ------> ETH_MDC
-    PC2_C     ------> ETH_TXD2
-    PC3_C     ------> ETH_TX_CLK
-    PA0     ------> ETH_CRS
-    PA1     ------> ETH_RX_CLK
+    PA1     ------> ETH_REF_CLK
     PA2     ------> ETH_MDIO
-    PA3     ------> ETH_COL
-    PA7     ------> ETH_RX_DV
+    PA7     ------> ETH_CRS_DV
     PC4     ------> ETH_RXD0
     PC5     ------> ETH_RXD1
-    PB0     ------> ETH_RXD2
-    PB1     ------> ETH_RXD3
     PB13     ------> ETH_TXD1
     PG11     ------> ETH_TX_EN
-    PG13     ------> ETH_TXD0 
+    PG13     ------> ETH_TXD0
     */
-    HAL_GPIO_DeInit(GPIOE, GPIO_PIN_2);
+    HAL_GPIO_DeInit(GPIOC, RMII_MDC_Pin|RMII_RXD0_Pin|RMII_RXD1_Pin);
 
-    HAL_GPIO_DeInit(GPIOC, RMII_MDC_Pin|GPIO_PIN_2|GPIO_PIN_3|RMII_RXD0_Pin 
-                          |RMII_RXD1_Pin);
+    HAL_GPIO_DeInit(GPIOA, GPIO_PIN_1|RMII_MDIO_Pin|GPIO_PIN_7);
 
-    HAL_GPIO_DeInit(GPIOA, GPIO_PIN_0|GPIO_PIN_1|RMII_MDIO_Pin|GPIO_PIN_3 
-                          |GPIO_PIN_7);
-
-    HAL_GPIO_DeInit(GPIOB, GPIO_PIN_0|GPIO_PIN_1|RMII_TXD1_Pin);
+    HAL_GPIO_DeInit(RMII_TXD1_GPIO_Port, RMII_TXD1_Pin);
 
     HAL_GPIO_DeInit(GPIOG, RMII_TX_EN_Pin|RMII_TXD0_Pin);
 
@@ -281,7 +262,7 @@ void HAL_ETH_RxCpltCallback(ETH_HandleTypeDef *heth)
 /* USER CODE END 4 */
 
 /*******************************************************************************
-                       LL Driver Interface ( LwIP stack --> ETH) 
+                       LL Driver Interface ( LwIP stack --> ETH)
 *******************************************************************************/
 /**
  * @brief In this function, the hardware should be initialized.
@@ -292,7 +273,7 @@ void HAL_ETH_RxCpltCallback(ETH_HandleTypeDef *heth)
  */
 static void low_level_init(struct netif *netif)
 {
-  HAL_StatusTypeDef hal_eth_init_status;
+  HAL_StatusTypeDef hal_eth_init_status = HAL_OK;
   uint32_t idx = 0;
   ETH_MACConfigTypeDef MACConf;
   int32_t PHYLinkState;
@@ -308,7 +289,7 @@ static void low_level_init(struct netif *netif)
   MACAddr[4] = 0x00;
   MACAddr[5] = 0x00;
   heth.Init.MACAddr = &MACAddr[0];
-  heth.Init.MediaInterface = HAL_ETH_MII_MODE;
+  heth.Init.MediaInterface = HAL_ETH_RMII_MODE;
   heth.Init.TxDesc = DMATxDscrTab;
   heth.Init.RxDesc = DMARxDscrTab;
   heth.Init.RxBuffLen = 1524;
@@ -325,15 +306,15 @@ static void low_level_init(struct netif *netif)
   TxConfig.CRCPadCtrl = ETH_CRC_PAD_INSERT;
 
   /* End ETH HAL Init */
-  
+
   /* Initialize the RX POOL */
   LWIP_MEMPOOL_INIT(RX_POOL);
 
-#if LWIP_ARP || LWIP_ETHERNET 
+#if LWIP_ARP || LWIP_ETHERNET
 
   /* set MAC hardware address length */
   netif->hwaddr_len = ETH_HWADDR_LEN;
-  
+
   /* set MAC hardware address */
   netif->hwaddr[0] =  heth.Init.MACAddr[0];
   netif->hwaddr[1] =  heth.Init.MACAddr[1];
@@ -341,23 +322,23 @@ static void low_level_init(struct netif *netif)
   netif->hwaddr[3] =  heth.Init.MACAddr[3];
   netif->hwaddr[4] =  heth.Init.MACAddr[4];
   netif->hwaddr[5] =  heth.Init.MACAddr[5];
-  
+
   /* maximum transfer unit */
   netif->mtu = ETH_MAX_PAYLOAD;
-  
+
   /* Accept broadcast address and ARP traffic */
   /* don't set NETIF_FLAG_ETHARP if this device is not an ethernet one */
   #if LWIP_ARP
     netif->flags |= NETIF_FLAG_BROADCAST | NETIF_FLAG_ETHARP;
-  #else 
+  #else
     netif->flags |= NETIF_FLAG_BROADCAST;
   #endif /* LWIP_ARP */
 
   for(idx = 0; idx < ETH_RX_DESC_CNT; idx ++)
   {
     HAL_ETH_DescAssignMemory(&heth, idx, Rx_Buff[idx], NULL);
-  } 
-      
+  }
+
   /* create a binary semaphore used for informing ethernetif of frame reception */
   osSemaphoreDef(SEM);
   RxPktSemaphore = osSemaphoreCreate(osSemaphore(SEM) , 1 );
@@ -367,7 +348,7 @@ static void low_level_init(struct netif *netif)
   osThreadDef(EthIf, ethernetif_input, osPriorityRealtime, 0, INTERFACE_THREAD_STACK_SIZE);
   osThreadCreate (osThread(EthIf), netif);
 /* USER CODE END OS_THREAD_DEF_CREATE_CMSIS_RTOS_V1 */
-/* USER CODE BEGIN PHY_PRE_CONFIG */ 
+/* USER CODE BEGIN PHY_PRE_CONFIG */
     
 /* USER CODE END PHY_PRE_CONFIG */
   /* Set PHY IO functions */
@@ -379,14 +360,14 @@ static void low_level_init(struct netif *netif)
   if (hal_eth_init_status == HAL_OK)
   {
     PHYLinkState = LAN8742_GetLinkState(&LAN8742);
-  
-    /* Get link state */  
+
+    /* Get link state */
     if(PHYLinkState <= LAN8742_STATUS_LINK_DOWN)
     {
       netif_set_link_down(netif);
       netif_set_down(netif);
     }
-    else 
+    else
     {
       switch (PHYLinkState)
       {
@@ -409,20 +390,20 @@ static void low_level_init(struct netif *netif)
       default:
         duplex = ETH_FULLDUPLEX_MODE;
         speed = ETH_SPEED_100M;
-        break;      
+        break;
       }
-    
+
     /* Get MAC Config MAC */
-    HAL_ETH_GetMACConfig(&heth, &MACConf); 
+    HAL_ETH_GetMACConfig(&heth, &MACConf);
     MACConf.DuplexMode = duplex;
     MACConf.Speed = speed;
     HAL_ETH_SetMACConfig(&heth, &MACConf);
-    
+
     HAL_ETH_Start_IT(&heth);
     netif_set_up(netif);
     netif_set_link_up(netif);
-    
-/* USER CODE BEGIN PHY_POST_CONFIG */ 
+
+/* USER CODE BEGIN PHY_POST_CONFIG */
     
 /* USER CODE END PHY_POST_CONFIG */
     }
@@ -434,7 +415,7 @@ static void low_level_init(struct netif *netif)
   }
 #endif /* LWIP_ARP || LWIP_ETHERNET */
 
-/* USER CODE BEGIN LOW_LEVEL_INIT */ 
+/* USER CODE BEGIN LOW_LEVEL_INIT */
     
 /* USER CODE END LOW_LEVEL_INIT */
 }
@@ -451,46 +432,45 @@ static void low_level_init(struct netif *netif)
  *
  * @note Returning ERR_MEM here if a DMA queue of your MAC is full can lead to
  *       strange results. You might consider waiting for space in the DMA queue
- *       to become availale since the stack doesn't retry to send a packet
+ *       to become available since the stack doesn't retry to send a packet
  *       dropped because of memory failure (except for the TCP timers).
  */
 
 static err_t low_level_output(struct netif *netif, struct pbuf *p)
 {
-  uint32_t i=0, framelen = 0;
+  uint32_t i=0;
   struct pbuf *q;
   err_t errval = ERR_OK;
   ETH_BufferTypeDef Txbuffer[ETH_TX_DESC_CNT];
-  
+
   memset(Txbuffer, 0 , ETH_TX_DESC_CNT*sizeof(ETH_BufferTypeDef));
-  
+
   for(q = p; q != NULL; q = q->next)
   {
-    if(i >= ETH_TX_DESC_CNT)	
+    if(i >= ETH_TX_DESC_CNT)
       return ERR_IF;
-    
+
     Txbuffer[i].buffer = q->payload;
     Txbuffer[i].len = q->len;
-    framelen += q->len;
-    
+
     if(i>0)
     {
       Txbuffer[i-1].next = &Txbuffer[i];
     }
-    
+
     if(q->next == NULL)
     {
       Txbuffer[i].next = NULL;
     }
-    
+
     i++;
   }
 
-  TxConfig.Length = framelen;
+  TxConfig.Length =  p->tot_len;
   TxConfig.TxBuffer = Txbuffer;
 
   HAL_ETH_Transmit(&heth, &TxConfig, ETH_DMA_TRANSMIT_TIMEOUT);
-  
+
   return errval;
 }
 
@@ -505,29 +485,37 @@ static err_t low_level_output(struct netif *netif, struct pbuf *p)
 static struct pbuf * low_level_input(struct netif *netif)
 {
   struct pbuf *p = NULL;
-  ETH_BufferTypeDef RxBuff;
-  uint32_t framelength = 0;
+  ETH_BufferTypeDef RxBuff[ETH_RX_DESC_CNT];
+  uint32_t framelength = 0, i = 0;
   struct pbuf_custom* custom_pbuf;
-  
-  if (HAL_ETH_GetRxDataBuffer(&heth, &RxBuff) == HAL_OK) 
+
+  memset(RxBuff, 0 , ETH_RX_DESC_CNT*sizeof(ETH_BufferTypeDef));
+
+  for(i = 0; i < ETH_RX_DESC_CNT -1; i++)
+  {
+    RxBuff[i].next=&RxBuff[i+1];
+  }
+
+  if (HAL_ETH_GetRxDataBuffer(&heth, RxBuff) == HAL_OK)
   {
     HAL_ETH_GetRxDataLength(&heth, &framelength);
-    
+
     /* Build Rx descriptor to be ready for next data reception */
     HAL_ETH_BuildRxDescriptors(&heth);
 
 #if !defined(DUAL_CORE) || defined(CORE_CM7)
     /* Invalidate data cache for ETH Rx Buffers */
-    SCB_InvalidateDCache_by_Addr((uint32_t *)RxBuff.buffer, framelength);
+    SCB_InvalidateDCache_by_Addr((uint32_t *)RxBuff->buffer, framelength);
 #endif
 
     custom_pbuf  = (struct pbuf_custom*)LWIP_MEMPOOL_ALLOC(RX_POOL);
-    custom_pbuf->custom_free_function = pbuf_free_custom;
-
-    p = pbuf_alloced_custom(PBUF_RAW, framelength, PBUF_REF, custom_pbuf, RxBuff.buffer, ETH_RX_BUFFER_SIZE);
+    if(custom_pbuf != NULL)
+    {
+      custom_pbuf->custom_free_function = pbuf_free_custom;
+      p = pbuf_alloced_custom(PBUF_RAW, framelength, PBUF_REF, custom_pbuf, RxBuff->buffer, framelength);
+    }
   }
-  
-  
+
   return p;
 }
 
@@ -544,27 +532,25 @@ void ethernetif_input(void const * argument)
 {
   struct pbuf *p;
   struct netif *netif = (struct netif *) argument;
-  
+
   for( ;; )
   {
     if (osSemaphoreWait(RxPktSemaphore, TIME_WAITING_FOR_INPUT) == osOK)
     {
       do
       {
-        LOCK_TCPIP_CORE();
         p = low_level_input( netif );
         if (p != NULL)
         {
           if (netif->input( p, netif) != ERR_OK )
           {
-            pbuf_free(p);           
+            pbuf_free(p);
           }
         }
-        UNLOCK_TCPIP_CORE();
       } while(p!=NULL);
     }
   }
-  
+
 }
 
 #if !LWIP_ARP
@@ -575,18 +561,18 @@ void ethernetif_input(void const * argument)
  * @return ERR_OK if ...
  */
 static err_t low_level_output_arp_off(struct netif *netif, struct pbuf *q, const ip4_addr_t *ipaddr)
-{  
+{
   err_t errval;
   errval = ERR_OK;
+
+/* USER CODE BEGIN 5 */
     
-/* USER CODE BEGIN 5 */ 
-    
-/* USER CODE END 5 */  
-    
+/* USER CODE END 5 */
+
   return errval;
-  
+
 }
-#endif /* LWIP_ARP */ 
+#endif /* LWIP_ARP */
 
 /**
  * Should be called at the beginning of the program to set up the
@@ -603,7 +589,7 @@ static err_t low_level_output_arp_off(struct netif *netif, struct pbuf *q, const
 err_t ethernetif_init(struct netif *netif)
 {
   LWIP_ASSERT("netif != NULL", (netif != NULL));
-  
+
 #if LWIP_NETIF_HOSTNAME
   /* Initialize interface hostname */
   netif->hostname = "lwip";
@@ -621,12 +607,12 @@ err_t ethernetif_init(struct netif *netif)
 #if LWIP_ARP
   netif->output = etharp_output;
 #else
-  /* The user should write ist own code in low_level_output_arp_off function */
+  /* The user should write its own code in low_level_output_arp_off function */
   netif->output = low_level_output_arp_off;
 #endif /* LWIP_ARP */
 #endif /* LWIP_ARP || LWIP_ETHERNET */
 #endif /* LWIP_IPV4 */
- 
+
 #if LWIP_IPV6
   netif->output_ip6 = ethip6_output;
 #endif /* LWIP_IPV6 */
@@ -647,12 +633,7 @@ err_t ethernetif_init(struct netif *netif)
 void pbuf_free_custom(struct pbuf *p)
 {
   struct pbuf_custom* custom_pbuf = (struct pbuf_custom*)p;
-  
-#if !defined(DUAL_CORE) || defined(CORE_CM7)
-  /* Invalidate data cache: lwIP and/or application may have written into buffer */
-  SCB_InvalidateDCache_by_Addr((uint32_t *)p->payload, p->tot_len);
-#endif
-  
+
   LWIP_MEMPOOL_FREE(RX_POOL, custom_pbuf);
 }
 
@@ -691,14 +672,14 @@ u32_t sys_now(void)
   * @retval 0 if OK, -1 if ERROR
   */
 int32_t ETH_PHY_IO_Init(void)
-{  
+{
   /* We assume that MDIO GPIO configuration is already done
-     in the ETH_MspInit() else it should be done here 
+     in the ETH_MspInit() else it should be done here
   */
-  
+
   /* Configure the MDIO Clock */
   HAL_ETH_SetMDIOClockRange(&heth);
-  
+
   return 0;
 }
 
@@ -716,7 +697,7 @@ int32_t ETH_PHY_IO_DeInit (void)
   * @brief  Read a PHY register through the MDIO interface.
   * @param  DevAddr: PHY port address
   * @param  RegAddr: PHY register address
-  * @param  pRegVal: pointer to hold the register value 
+  * @param  pRegVal: pointer to hold the register value
   * @retval 0 if OK -1 if Error
   */
 int32_t ETH_PHY_IO_ReadReg(uint32_t DevAddr, uint32_t RegAddr, uint32_t *pRegVal)
@@ -725,7 +706,7 @@ int32_t ETH_PHY_IO_ReadReg(uint32_t DevAddr, uint32_t RegAddr, uint32_t *pRegVal
   {
     return -1;
   }
-  
+
   return 0;
 }
 
@@ -733,7 +714,7 @@ int32_t ETH_PHY_IO_ReadReg(uint32_t DevAddr, uint32_t RegAddr, uint32_t *pRegVal
   * @brief  Write a value to a PHY register through the MDIO interface.
   * @param  DevAddr: PHY port address
   * @param  RegAddr: PHY register address
-  * @param  RegVal: Value to be written 
+  * @param  RegVal: Value to be written
   * @retval 0 if OK -1 if Error
   */
 int32_t ETH_PHY_IO_WriteReg(uint32_t DevAddr, uint32_t RegAddr, uint32_t RegVal)
@@ -742,7 +723,7 @@ int32_t ETH_PHY_IO_WriteReg(uint32_t DevAddr, uint32_t RegAddr, uint32_t RegVal)
   {
     return -1;
   }
-  
+
   return 0;
 }
 
@@ -760,23 +741,22 @@ int32_t ETH_PHY_IO_GetTick(void)
   * @param  argument: netif
   * @retval None
   */
- 
+
 void ethernet_link_thread(void const * argument)
 {
   ETH_MACConfigTypeDef MACConf;
-  uint32_t PHYLinkState;
+  int32_t PHYLinkState;
   uint32_t linkchanged = 0, speed = 0, duplex =0;
-  
+
   struct netif *netif = (struct netif *) argument;
-  
 /* USER CODE BEGIN ETH link init */
 
 /* USER CODE END ETH link init */
-  
+
   for(;;)
   {
   PHYLinkState = LAN8742_GetLinkState(&LAN8742);
-  
+
   if(netif_is_link_up(netif) && (PHYLinkState <= LAN8742_STATUS_LINK_DOWN))
   {
     HAL_ETH_Stop_IT(&heth);
@@ -808,17 +788,17 @@ void ethernet_link_thread(void const * argument)
       linkchanged = 1;
       break;
     default:
-      break;      
+      break;
     }
-    
+
     if(linkchanged)
     {
       /* Get MAC Config MAC */
-      HAL_ETH_GetMACConfig(&heth, &MACConf); 
+      HAL_ETH_GetMACConfig(&heth, &MACConf);
       MACConf.DuplexMode = duplex;
       MACConf.Speed = speed;
       HAL_ETH_SetMACConfig(&heth, &MACConf);
-      
+
       HAL_ETH_Start_IT(&heth);
       netif_set_up(netif);
       netif_set_link_up(netif);

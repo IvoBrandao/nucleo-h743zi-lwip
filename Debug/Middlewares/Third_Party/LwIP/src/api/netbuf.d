@@ -52,6 +52,7 @@ Middlewares/Third_Party/LwIP/src/api/netbuf.o: \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/priv/memp_std.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/priv/memp_priv.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/mem.h \
+ ../Middlewares/Third_Party/LwIP/src/include/lwip/priv/mem_priv.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/stats.h
 
 ../Middlewares/Third_Party/LwIP/src/include/lwip/opt.h:
@@ -159,5 +160,7 @@ Middlewares/Third_Party/LwIP/src/api/netbuf.o: \
 ../Middlewares/Third_Party/LwIP/src/include/lwip/priv/memp_priv.h:
 
 ../Middlewares/Third_Party/LwIP/src/include/lwip/mem.h:
+
+../Middlewares/Third_Party/LwIP/src/include/lwip/priv/mem_priv.h:
 
 ../Middlewares/Third_Party/LwIP/src/include/lwip/stats.h:

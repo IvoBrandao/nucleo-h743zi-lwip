@@ -52,7 +52,8 @@ Middlewares/Third_Party/LwIP/src/core/ipv4/ip4_addr.o: \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/mem.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/memp.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/priv/memp_std.h \
- ../Middlewares/Third_Party/LwIP/src/include/lwip/priv/memp_priv.h
+ ../Middlewares/Third_Party/LwIP/src/include/lwip/priv/memp_priv.h \
+ ../Middlewares/Third_Party/LwIP/src/include/lwip/priv/mem_priv.h
 
 ../Middlewares/Third_Party/LwIP/src/include/lwip/opt.h:
 
@@ -161,3 +162,5 @@ Middlewares/Third_Party/LwIP/src/core/ipv4/ip4_addr.o: \
 ../Middlewares/Third_Party/LwIP/src/include/lwip/priv/memp_std.h:
 
 ../Middlewares/Third_Party/LwIP/src/include/lwip/priv/memp_priv.h:
+
+../Middlewares/Third_Party/LwIP/src/include/lwip/priv/mem_priv.h:

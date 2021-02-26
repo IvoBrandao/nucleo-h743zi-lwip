@@ -25,11 +25,14 @@
 #include "cmsis_os.h"
 
 /* Private includes ----------------------------------------------------------*/
-/* USER CODE BEGIN Includes */     
+/* USER CODE BEGIN Includes */
 #include "lwipopts.h"
 #include "lwip/opt.h"
 #include "lwip/netif.h"
 #include "lwip/tcpip.h"
+#include "lwip/udp.h"
+#include "lwip.h"
+#include "string.h"
 #if LWIP_DHCP
 #include "lwip/dhcp.h"
 #endif
@@ -231,27 +234,28 @@ void Task_UdpServer(void const * argument)
   /* USER CODE BEGIN Task_UdpServer */
 
 
-#if 0
 	const char* message = "Hello UDP message!\n\r";
 	ip_addr_t PC_IPADDR;
-	IP_ADDR4(&PC_IPADDR, 10, 10, 0, 1);
+	IP_ADDR4(&PC_IPADDR, 10, 50, 1, 10);
 
 	struct udp_pcb* my_udp = udp_new();
-	udp_connect(my_udp, &PC_IPADDR, 55151);
+	udp_connect(my_udp, &PC_IPADDR, 8888);
 	struct pbuf* udp_buffer = NULL;
-#endif
+
+
 	/* Infinite loop */
-	for (;;) {
-	  osDelay(1000);
-#if 0
+	for (;;)
+	{
 	  udp_buffer = pbuf_alloc(PBUF_TRANSPORT, strlen(message), PBUF_RAM);
 	  if (udp_buffer != NULL) {
 	    memcpy(udp_buffer->payload, message, strlen(message));
 	    udp_send(my_udp, udp_buffer);
 	    pbuf_free(udp_buffer);
 
+
+
 	  }
-#endif
+	  osDelay(1000);
 	}
   /* USER CODE END Task_UdpServer */
 }

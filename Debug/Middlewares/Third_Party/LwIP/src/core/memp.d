@@ -44,6 +44,7 @@ Middlewares/Third_Party/LwIP/src/core/memp.o: \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/priv/memp_std.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/priv/memp_priv.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/mem.h \
+ ../Middlewares/Third_Party/LwIP/src/include/lwip/priv/mem_priv.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/stats.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/sys.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/err.h \
@@ -81,10 +82,12 @@ Middlewares/Third_Party/LwIP/src/core/memp.o: \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/prot/ip.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/prot/udp.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/tcp.h \
+ ../Middlewares/Third_Party/LwIP/src/include/lwip/tcpbase.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/icmp.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/prot/icmp.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/priv/tcp_priv.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/prot/tcp.h \
+ ../Middlewares/Third_Party/LwIP/src/include/lwip/altcp.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/ip4_frag.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/netbuf.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/api.h \
@@ -93,14 +96,13 @@ Middlewares/Third_Party/LwIP/src/core/memp.o: \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/timeouts.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/priv/api_msg.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/igmp.h \
+ ../Middlewares/Third_Party/LwIP/src/include/lwip/priv/sockets_priv.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/sockets.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/inet.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/errno.h \
- ../Middlewares/Third_Party/LwIP/src/include/lwip/netifapi.h \
- ../Middlewares/Third_Party/LwIP/src/include/lwip/dhcp.h \
- ../Middlewares/Third_Party/LwIP/src/include/lwip/autoip.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/etharp.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/prot/ethernet.h \
+ ../Middlewares/Third_Party/LwIP/src/include/lwip/prot/ieee.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/prot/etharp.h \
  ../Middlewares/Third_Party/LwIP/src/include/netif/ppp/ppp_opts.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/netdb.h \
@@ -199,6 +201,8 @@ Middlewares/Third_Party/LwIP/src/core/memp.o: \
 
 ../Middlewares/Third_Party/LwIP/src/include/lwip/mem.h:
 
+../Middlewares/Third_Party/LwIP/src/include/lwip/priv/mem_priv.h:
+
 ../Middlewares/Third_Party/LwIP/src/include/lwip/stats.h:
 
 ../Middlewares/Third_Party/LwIP/src/include/lwip/sys.h:
@@ -273,6 +277,8 @@ Middlewares/Third_Party/LwIP/src/core/memp.o: \
 
 ../Middlewares/Third_Party/LwIP/src/include/lwip/tcp.h:
 
+../Middlewares/Third_Party/LwIP/src/include/lwip/tcpbase.h:
+
 ../Middlewares/Third_Party/LwIP/src/include/lwip/icmp.h:
 
 ../Middlewares/Third_Party/LwIP/src/include/lwip/prot/icmp.h:
@@ -280,6 +286,8 @@ Middlewares/Third_Party/LwIP/src/core/memp.o: \
 ../Middlewares/Third_Party/LwIP/src/include/lwip/priv/tcp_priv.h:
 
 ../Middlewares/Third_Party/LwIP/src/include/lwip/prot/tcp.h:
+
+../Middlewares/Third_Party/LwIP/src/include/lwip/altcp.h:
 
 ../Middlewares/Third_Party/LwIP/src/include/lwip/ip4_frag.h:
 
@@ -297,21 +305,19 @@ Middlewares/Third_Party/LwIP/src/core/memp.o: \
 
 ../Middlewares/Third_Party/LwIP/src/include/lwip/igmp.h:
 
+../Middlewares/Third_Party/LwIP/src/include/lwip/priv/sockets_priv.h:
+
 ../Middlewares/Third_Party/LwIP/src/include/lwip/sockets.h:
 
 ../Middlewares/Third_Party/LwIP/src/include/lwip/inet.h:
 
 ../Middlewares/Third_Party/LwIP/src/include/lwip/errno.h:
 
-../Middlewares/Third_Party/LwIP/src/include/lwip/netifapi.h:
-
-../Middlewares/Third_Party/LwIP/src/include/lwip/dhcp.h:
-
-../Middlewares/Third_Party/LwIP/src/include/lwip/autoip.h:
-
 ../Middlewares/Third_Party/LwIP/src/include/lwip/etharp.h:
 
 ../Middlewares/Third_Party/LwIP/src/include/lwip/prot/ethernet.h:
+
+../Middlewares/Third_Party/LwIP/src/include/lwip/prot/ieee.h:
 
 ../Middlewares/Third_Party/LwIP/src/include/lwip/prot/etharp.h:
 

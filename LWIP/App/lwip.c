@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2021 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under Ultimate Liberty license
@@ -16,7 +16,7 @@
   *
   ******************************************************************************
   */
-  
+
 /* Includes ------------------------------------------------------------------*/
 #include "lwip.h"
 #include "lwip/init.h"
@@ -58,18 +58,21 @@ void MX_LWIP_Init(void)
 {
   /* IP addresses initialization */
   IP_ADDRESS[0] = 10;
-  IP_ADDRESS[1] = 10;
-  IP_ADDRESS[2] = 10;
-  IP_ADDRESS[3] = 10;
+  IP_ADDRESS[1] = 50;
+  IP_ADDRESS[2] = 1;
+  IP_ADDRESS[3] = 11;
   NETMASK_ADDRESS[0] = 255;
   NETMASK_ADDRESS[1] = 255;
   NETMASK_ADDRESS[2] = 255;
   NETMASK_ADDRESS[3] = 0;
   GATEWAY_ADDRESS[0] = 10;
-  GATEWAY_ADDRESS[1] = 10;
-  GATEWAY_ADDRESS[2] = 10;
-  GATEWAY_ADDRESS[3] = 11;
-  
+  GATEWAY_ADDRESS[1] = 50;
+  GATEWAY_ADDRESS[2] = 1;
+  GATEWAY_ADDRESS[3] = 1;
+
+/* USER CODE BEGIN IP_ADDRESSES */
+/* USER CODE END IP_ADDRESSES */
+
   /* Initilialize the LwIP stack with RTOS */
   tcpip_init( NULL, NULL );
 
@@ -118,11 +121,11 @@ void MX_LWIP_Init(void)
 #endif
 
 /**
-  * @brief  Notify the User about the network interface config status 
+  * @brief  Notify the User about the network interface config status
   * @param  netif: the network interface
   * @retval None
   */
-static void ethernet_link_status_updated(struct netif *netif) 
+static void ethernet_link_status_updated(struct netif *netif)
 {
   if (netif_is_up(netif))
   {
@@ -136,7 +139,7 @@ static void ethernet_link_status_updated(struct netif *netif)
 /* USER CODE END 5 */
   }
   else /* netif is down */
-  {  
+  {
 /* USER CODE BEGIN 6 */
 		/* When the netif link is down this function must be called */
 		netif_set_down(&gnetif);
@@ -145,7 +148,7 @@ static void ethernet_link_status_updated(struct netif *netif)
     DHCP_state = DHCP_LINK_DOWN;
 #endif
 /* USER CODE END 6 */
-  } 
+  }
 }
 
 #if defined ( __CC_ARM )  /* MDK ARM Compiler */
@@ -162,7 +165,7 @@ sio_fd_t sio_open(u8_t devnum)
 /* USER CODE BEGIN 7 */
   sd = 0; // dummy code
 /* USER CODE END 7 */
-	
+
   return sd;
 }
 
@@ -197,7 +200,7 @@ u32_t sio_read(sio_fd_t fd, u8_t *data, u32_t len)
 
 /* USER CODE BEGIN 9 */
   recved_bytes = 0; // dummy code
-/* USER CODE END 9 */	
+/* USER CODE END 9 */
   return recved_bytes;
 }
 
@@ -216,7 +219,7 @@ u32_t sio_tryread(sio_fd_t fd, u8_t *data, u32_t len)
 
 /* USER CODE BEGIN 10 */
   recved_bytes = 0; // dummy code
-/* USER CODE END 10 */	
+/* USER CODE END 10 */
   return recved_bytes;
 }
 #endif /* MDK ARM Compiler */

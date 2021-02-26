@@ -72,6 +72,7 @@ Middlewares/Third_Party/LwIP/src/api/api_lib.o: \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/priv/memp_std.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/priv/memp_priv.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/mem.h \
+ ../Middlewares/Third_Party/LwIP/src/include/lwip/priv/mem_priv.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/stats.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/ip.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/netif.h \
@@ -89,6 +90,7 @@ Middlewares/Third_Party/LwIP/src/api/api_lib.o: \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/timeouts.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/priv/tcp_priv.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/tcp.h \
+ ../Middlewares/Third_Party/LwIP/src/include/lwip/tcpbase.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/icmp.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/prot/icmp.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/prot/tcp.h
@@ -239,6 +241,8 @@ Middlewares/Third_Party/LwIP/src/api/api_lib.o: \
 
 ../Middlewares/Third_Party/LwIP/src/include/lwip/mem.h:
 
+../Middlewares/Third_Party/LwIP/src/include/lwip/priv/mem_priv.h:
+
 ../Middlewares/Third_Party/LwIP/src/include/lwip/stats.h:
 
 ../Middlewares/Third_Party/LwIP/src/include/lwip/ip.h:
@@ -272,6 +276,8 @@ Middlewares/Third_Party/LwIP/src/api/api_lib.o: \
 ../Middlewares/Third_Party/LwIP/src/include/lwip/priv/tcp_priv.h:
 
 ../Middlewares/Third_Party/LwIP/src/include/lwip/tcp.h:
+
+../Middlewares/Third_Party/LwIP/src/include/lwip/tcpbase.h:
 
 ../Middlewares/Third_Party/LwIP/src/include/lwip/icmp.h:
 

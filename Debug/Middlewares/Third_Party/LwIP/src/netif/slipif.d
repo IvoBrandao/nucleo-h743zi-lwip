@@ -54,6 +54,7 @@ Middlewares/Third_Party/LwIP/src/netif/slipif.o: \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/memp.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/priv/memp_std.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/priv/memp_priv.h \
+ ../Middlewares/Third_Party/LwIP/src/include/lwip/priv/mem_priv.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/snmp.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/sys.h \
  ../Middlewares/Third_Party/LwIP/system/arch/sys_arch.h \
@@ -185,6 +186,8 @@ Middlewares/Third_Party/LwIP/src/netif/slipif.o: \
 ../Middlewares/Third_Party/LwIP/src/include/lwip/priv/memp_std.h:
 
 ../Middlewares/Third_Party/LwIP/src/include/lwip/priv/memp_priv.h:
+
+../Middlewares/Third_Party/LwIP/src/include/lwip/priv/mem_priv.h:
 
 ../Middlewares/Third_Party/LwIP/src/include/lwip/snmp.h:
 

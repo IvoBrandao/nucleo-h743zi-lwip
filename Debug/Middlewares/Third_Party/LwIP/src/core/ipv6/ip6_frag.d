@@ -55,6 +55,7 @@ Middlewares/Third_Party/LwIP/src/core/ipv6/ip6_frag.o: \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/memp.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/priv/memp_std.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/priv/memp_priv.h \
+ ../Middlewares/Third_Party/LwIP/src/include/lwip/priv/mem_priv.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/icmp6.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/prot/icmp6.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/nd6.h \
@@ -174,6 +175,8 @@ Middlewares/Third_Party/LwIP/src/core/ipv6/ip6_frag.o: \
 ../Middlewares/Third_Party/LwIP/src/include/lwip/priv/memp_std.h:
 
 ../Middlewares/Third_Party/LwIP/src/include/lwip/priv/memp_priv.h:
+
+../Middlewares/Third_Party/LwIP/src/include/lwip/priv/mem_priv.h:
 
 ../Middlewares/Third_Party/LwIP/src/include/lwip/icmp6.h:
 
